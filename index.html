@@ -1,13 +1,64 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="utf-8">
 <title>UWU Election Map</title>
+
+<style>
+body {font-family:sans-serif;margin:0}
+#totals {padding:10px;background:#eee;font-size:18px}
+.U4Y {fill:#2E74C0}
+.MF {fill:#C0822B}
+</style>
+
 </head>
+
 <body>
 
-<h1>UWU Election Map</h1>
+<div id="totals">
+Blue: <span id="blue">0</span> |
+Orange: <span id="orange">0</span>
+</div>
 
-<object data="map.svg" type="image/svg+xml" width="100%" height="800"></object>
+<object id="map" data="map.svg" type="image/svg+xml" width="100%" height="90%"></object>
+
+<script>
+let blue=0, orange=0;
+
+document.getElementById("map").addEventListener("load", function() {
+
+  const svg = this.contentDocument;
+
+  svg.querySelectorAll("[data-ev]").forEach(region => {
+
+    region.addEventListener("click", () => {
+
+      const ev = parseInt(region.dataset.ev);
+
+      if(region.classList.contains("U4Y")){
+        region.classList.remove("U4Y");
+        region.classList.add("MF");
+        blue -= ev;
+        orange += ev;
+      }
+      else if(region.classList.contains("MF")){
+        region.classList.remove("MF");
+        orange -= ev;
+      }
+      else{
+        region.classList.add("U4Y");
+        blue += ev;
+      }
+
+      document.getElementById("blue").textContent = blue;
+      document.getElementById("orange").textContent = orange;
+
+    });
+
+  });
+
+});
+</script>
 
 </body>
 </html>
